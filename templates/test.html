@@ -1,0 +1,7 @@
+{% extends 'base.html' %}
+{% block title %}overriding page title{% endblock %}
+
+{% block content1 %}
+    OVERRIDING CONTENT BLOCK, but leaving content2 block there <br>
+    color or state being passed from the backend is: {{ color_or_state }}<br>
+{% endblock %}
