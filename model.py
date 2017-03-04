@@ -27,7 +27,8 @@ class SituationCard(db.Model):
     option_text = db.Column(db.String(20), nullable=False)
     full_text = db.Column(db.String, nullable=False)
     image_id = db.Column(db.Integer, db.ForeignKey("images.id"))
-    next_category = db.Column(db.String(20))
+    next_category_0 = db.Column(db.String(20), default=None)  # if there are prereq categories, e.g. resource agency
+    next_category_1 = db.Column(db.String(20))
 
     image = relationship("Image", foreign_keys=[image_id])
     # gamedecisions = db.relationship("GameDecision", backref="situationcard")
@@ -94,9 +95,7 @@ class GameDecision(db.Model):
     is_end = db.Column(db.Boolean, default=False)
 
     game = relationship("Game", foreign_keys=[game_id])
-    situation_card = relationship(
-        "SituationCard", foreign_keys=[situation_card_id]
-    )
+    situation_card = relationship("SituationCard", foreign_keys=[situation_card_id])
 
     def __repr__(self):
         return "<id=%s, game_id=%s, situation_card_id=%s, choice_1_id=%s, choice_2_id=%s, choice_3_id=%s>" % (
