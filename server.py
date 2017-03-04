@@ -8,7 +8,8 @@ app = Flask(__name__)
 @app.route('/sample_state', methods=['GET'])
 def render_state():
 	state = db.session.query(State).first()
-	return render_template("test.html", color_or_state=state.name)
+	state_name = state.name if state else "filler state if no state in db"
+	return render_template("test.html", color_or_state=state_name)
 
 # Below are several sample Flask routes to reference
 @app.route('/test', methods=['GET'])
