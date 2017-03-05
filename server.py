@@ -26,8 +26,8 @@ def render_homepage():
     Homepage, before the player starts the game.
     Frontend will have some button to trigger `/start`.
     """
-    placeholder_text = "PLACEHOLDER HERE"
-    image = db.session.query(Image).first()
+    placeholder_text = "PLACEHOLDER LANGUAGE IMAGE BELOW!"
+    image = db.session.query(Image).filter(Image.short_name == "language").first()
     return render_template("homepage.html", placeholder_text=placeholder_text, image_location=image.location)
 
 

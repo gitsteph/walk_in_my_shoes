@@ -117,7 +117,7 @@ Executing below will load up the contents of the file you specify into an intera
 (venv)$ ipython -i business.py
 ```
 ```ipython
->>> StaticData.add_image("./static/img/nytimes_img.png")
+>>> CSVParser.read_csv("images")
 >>> CSVParser.read_csv("biographies")
 >>> CSVParser.read_csv("situationcards")
 >>> CSVParser.read_csv("clinics")

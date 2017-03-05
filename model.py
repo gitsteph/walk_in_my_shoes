@@ -45,6 +45,7 @@ class Image(db.Model):
     __tablename__ = "images"
 
     id = db.Column(db.Integer, autoincrement=True, nullable=False, primary_key=True)
+    short_name = db.Column(db.String)
     location = db.Column(db.String, nullable=False)
 
     # situationcards = db.relationship("Image", backref="situationcard")

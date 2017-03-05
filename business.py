@@ -45,8 +45,8 @@ class StaticData():
         print("bio {0} added to {1} table".format(new_bio.id, Biography.__tablename__))
 
     @classmethod
-    def add_image(cls, image_location):
-        new_image = Image(location=image_location)
+    def add_image(cls, short_name, image_location):
+        new_image = Image(short_name=short_name, location=image_location)
         db.session.add(new_image)
         db.session.commit()
         print("image {0} added to {1} table".format(new_image.id, Image.__tablename__))
@@ -94,9 +94,9 @@ class CSVParser():
     def read_csv(cls, csv_category):
         seed_file = "{}.csv".format(csv_category)
 
-        if csv_category not in ("biographies", "situationcards", "clinics"):
+        if csv_category not in ("biographies", "situationcards", "clinics", "images"):
             raise BaseException("Not a valid file seeding string;"
-                                "instead type biographies, situationcards, or clinics")
+                                "instead type biographies, situationcards, images, or clinics")
 
         with open("./seed_files/{}".format(seed_file), 'rb') as csvfile:
             rows = csv.DictReader(
@@ -134,8 +134,14 @@ class CSVParser():
                         city=row["city"], state=row["state"], max_weeks_limit=row["max_weeks_limit"]
                     )
                     print row["max_weeks_limit"]
+                elif csv_category == "images":
+                    StaticData.add_image(
+                        short_name=row["short_name"], image_location=row["location"]
+                    )
+                    print row["short_name"]
 
 
+#### TODO: NEED TO TEST BELOW
 class Game():
     @classmethod
     def generate_new_game(cls):
@@ -152,5 +158,5 @@ class Game():
             GameDecision.game_id == game_id).order_by(GameDecision.id.desc()).first()
         last_situation_card = db.session.query(SituationCard).filter(
             SituationCard.id == last_game_decision_card.situation_card_id).first()
-        next_category = last_situation_card.next_category_0 or last_situation_card.next_category_1
+        # next_category = last_situation_card.next_category_0 or last_situation_card.next_category_1
         pass
