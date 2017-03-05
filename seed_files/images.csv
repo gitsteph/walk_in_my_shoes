@@ -1,0 +1,9 @@
+short_name,location
+data_diagram,./static/img/walk_in_my_shoes.png
+childcare,./static/img/childcare.jpg
+confidentiality,./static/img/confidentiality.jpg
+health,./static/img/health.jpg
+language,./static/img/language.jpg
+provider,./static/img/provider.jpg
+timeoff,./static/img/timeoff.jpg
+transportation,./static/img/transportation.jpg
