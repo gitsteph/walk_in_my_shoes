@@ -10,18 +10,6 @@ app = Flask(__name__)
 # (resource agency optional)
 
 
-# IN PROGRESS
-# @app.route('/decision', methods=['POST'])
-# def process_decision():
-# 	"""AJAX route to process decision and redirect to next game state"""
-# 	selected_choice_id = request.form.get("selected_choice_id")
-# 	days_pregnant_int = request.form.get("current_day_int")
-
-# 	# hard-coding this value in for now until we have a seeded database
-# 	day_diff_int = 4  # add four days
-# 	days_pregnant_int += day_diff_int
-
-
 @app.route('/', methods=['GET'])
 def render_homepage():
 	"""
@@ -38,13 +26,43 @@ def start_new_game():
 	Start a new game.
 	Pull random bio from database, create player record, and pass bio information to template.
 	"""
+
+	# TODO: create new game instance with a randomly selected biography
+
 	image_location = "./static/img/nytimes_img.png"  # placeholder image location only
 	return render_template("main_game.html", image_location=image_location)
 
 
-@app.route('/<game_id>', methods=['POST'])
+#### IN PROGRESS
+@app.route('/decision', methods=['POST'])
+def process_decision():
+	"""
+	AJAX route to process decision and redirect to next game state.
+	Will send post request from HTML form asynchronously, process info, then reroute to next game state.
+	"""
+	selected_choice_id = request.form.get("selected_choice_id")
+	days_pregnant_int = request.form.get("current_day_int")
+
+	# TODO: create new gamedecision instance and store to db, return gamedecision.id
+	# hard-coding this value in for now until we have a seeded database
+
+	day_diff_int = 4  # add four days
+	days_pregnant_int += day_diff_int
+
+	game_id = 4  # placeholder value
+	game_decision_id = 10  # placeholder value
+	return redirect("/{0}/{1}".format(game_id, game_decision_id))
+
+
+@app.route('/<game_id>/<game_decision_id>', methods=['GET'])
 def render_next_game_state(game_id):
+	"""
+	Renders template with image location, player info, and gamedecision object to use.
+	Also passes up situationcard data.
+	Detect if you have reached the final card.
+	"""
 	print(game_id)
+	print(game_decision_id)
 	image_location = "./static/img/nytimes_img.png"  # placeholder image location only
 	is_final = False  # change after db is seeded
 	return render_template("main_game.html", image_location=image_location, is_final=is_final)
