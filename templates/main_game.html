@@ -11,6 +11,7 @@
     </div>
 
 	<form action="/{{ next_path }}" method="POST">
+        <input type="hidden" name="game_id" value="{{ game_id }}">
         <input type="hidden" name="bio_days_pregnant" value="{{ bio_days_pregnant }}">
         <input type="hidden" name="current_category" value="{{ current_category }}">
         <button type="submit" name="choice_id" value="{{ choice1_id }}">{{choice1_option_text}}</button>
