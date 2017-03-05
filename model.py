@@ -26,9 +26,9 @@ class SituationCard(db.Model):
     wait_or_extra_condition_weeks_over = db.Column(db.String, nullable=True)  # to handle weird data for now, should fix later
     # money_impact = db.Column(db.Integer, nullable=True)
     extra_category = db.Column(db.String, default=None)  # if there are prereq categories, e.g. resource agency
-    next_category = db.Column(db.String),
+    next_category = db.Column(db.String)
     option_text = db.Column(db.String, nullable=False)
-    text_badge = db.Column(db.String),
+    text_badge = db.Column(db.String)
     full_text = db.Column(db.String, nullable=False)
     image_id = db.Column(db.Integer, db.ForeignKey("images.id"))
 
