@@ -4,7 +4,17 @@ from datetime import datetime
 from flask import Flask
 from sqlalchemy import func #
 
-from model import db, connect_to_db, State, SituationCard, Image, Biography, Game, GameDecision
+from model import (
+    db,
+    connect_to_db,
+    State,
+    SituationCard,
+    Image,
+    Biography,
+    Game,
+    GameDecision,
+    WHSClinic,
+)
 from server import app
 
 
@@ -69,6 +79,13 @@ class StaticData():
             new_situation_card.id, SituationCard.__tablename__)
         )
 
+    @classmethod
+    def add_clinic(cls, city, state, max_weeks_limit):
+        new_clinic = WHSClinic(city=city, state=state, max_weeks_limit=max_weeks_limit)
+        db.session.add(new_clinic)
+        db.session.commit()
+        print("clinic {0} added to {1} table".format(new_clinic.id, WHSClinic.__tablename__))
+
 
 # TODO: eventually move to `seed.py`
 class CSVParser():
@@ -76,6 +93,11 @@ class CSVParser():
     @classmethod
     def read_csv(cls, csv_category):
         seed_file = "{}.csv".format(csv_category)
+
+        if csv_category not in ("biographies", "situationcards", "clinics"):
+            raise BaseException("Not a valid file seeding string;"
+                                "instead type biographies, situationcards, or clinics")
+
         with open("./seed_files/{}".format(seed_file), 'rb') as csvfile:
             rows = csv.DictReader(
                 csvfile,
@@ -93,8 +115,7 @@ class CSVParser():
                         image_id=int(row["image_id"])
                     )
                     print row["age"]
-                else:
-                    print(row)
+                elif csv_category == "situationcards":
                     StaticData.add_situation_card(
                         category=row["category"],
                         day_impact=int(row["day_impact"]),
@@ -108,6 +129,12 @@ class CSVParser():
                         image_id=int(row["image_id"]),
                     )
                     print row["category"]
+                elif csv_category == "clinics":
+                    StaticData.add_clinic(
+                        city=row["city"], state=row["state"], max_weeks_limit=row["max_weeks_limit"]
+                    )
+                    print row["max_weeks_limit"]
+
 
 class Game():
     @classmethod

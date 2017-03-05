@@ -72,6 +72,15 @@ class Biography(db.Model):
         return "<id=%s, weeks_pregnant=%s>" % (self.id, self.weeks_pregnant)
 
 
+class WHSClinic(db.Model):
+    __tablename__ = "clinics"
+
+    id = db.Column(db.Integer, autoincrement=True, nullable=False, primary_key=True)
+    city = db.Column(db.String, nullable=False)
+    state = db.Column(db.String, nullable=False)
+    max_weeks_limit = db.Column(db.Integer, nullable=False)
+
+
 class Game(db.Model):
     """For each game played"""
     __tablename__ = "games"

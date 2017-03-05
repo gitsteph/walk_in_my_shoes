@@ -24,6 +24,7 @@ git clone https://github.com/gitsteph/walk_in_my_shoes.git
 ### 2. Install `pip`, `virtualenv`, create a new virtual environment, and activate it
 (if `pip install virtualenv` does not work, try uninstalling and reinstalling virtualenv...
 or try deleting `sudo rm -r /usr/local/var/postgres` then installing virtualenv again)
+
 To install:
 ```bash
 $ sudo easy_install pip
@@ -105,7 +106,6 @@ aah=# DROP TABLE tablename_of_model_you_changed CASCADE;
 ```
 To access content/test routes, type in the address bar: `http://localhost:5000/your_route_name`
 
-
 ### 9. ipython!
 Executing below will load up the contents of the file you specify into an interactive ipython session.
 ```bash
@@ -120,6 +120,7 @@ Executing below will load up the contents of the file you specify into an intera
 >>> StaticData.add_image("./static/img/nytimes_img.png")
 >>> CSVParser.read_csv("biographies")
 >>> CSVParser.read_csv("situationcards")
+>>> CSVParser.read_csv("clinics")
 ```
 (TODO: make this a shell script)
 
