@@ -5,7 +5,7 @@
     placeholder being passed from the backend is: {{ placeholder_text }}<br>
     <img src="{{ image_location }}" alt="image_name_placeholder" height="500" width="500">
 
-    <form action="/start" method="POST">
+    <form action="/{{ next_path }}" method="POST">
 		<input type="submit" class="btn btn-primary" value="Upload"></input>
     </form>
 {% endblock %}

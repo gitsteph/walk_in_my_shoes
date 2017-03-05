@@ -1,4 +1,6 @@
 from flask import Flask, render_template, request
+
+from business import NewGame
 from model import (
     connect_to_db,
     db,
@@ -28,72 +30,42 @@ def render_homepage():
     """
     placeholder_text = "PLACEHOLDER LANGUAGE IMAGE BELOW!"
     image = db.session.query(Image).filter(Image.short_name == "language").first() # maybe have an image for the bio/start one?
-    return render_template("homepage.html", placeholder_text=placeholder_text, image_location=image.location)
+    return render_template(
+        "homepage.html", placeholder_text=placeholder_text, image_location=image.location, next_path="start")
 
 
-@app.route('/start', methods=['GET'])
+@app.route('/start', methods=['POST'])
 def start_new_game():
     """
     Start a new game.
     Pull random bio from database, create player record, and pass bio information to template.
     """
-    choice = request.args.get('choice')
+    new_game_id, biography_obj = NewGame.generate_new_game()
+    image = db.session.query(Image).filter(Image.short_name == "language").first() # maybe have an image for the bio/start one?
+    print(biography_obj.image.location)
+    first_situationcard_category = "language"  # probably can remove this
 
-    if not choice:
-        days = 3 * 7
-        category = 'Start'
-        card_text = "Hello and welcome to Walk in my Shoes!"
-        next_card_id = "a_bio"
+    game_decision_obj, situationcard_objs_list = NewGame.generate_new_game_decision(new_game_id)
 
-        choices = [
-            {
-                'value': 'start',
-                'text': 'Begin'
-            }
-        ]
-
-    else:
-        # Should have chosen option and weeks pregnant
-        current_card_id = request.args.get('current')
-        next_card_id = choice
-        days = request.args.get('days')
-        try:
-            days = int(days)
-        except (ValueError, TypeError) as e:
-            days = 12 * 7
-
-        days += 3
-
-        choices = [
-            {
-                'value': 'choice_1',
-                'text': 'A Choice'
-            },
-            {
-                'value': 'choice_2',
-                'text': 'Another Choice'
-            },
-            {
-                'value': 'choice_3',
-                'text': 'Last Choice'
-            }
-        ]
-
-        category = 'Category'
-        card_text = "You chose {choice} and are {days} days pregnant".format(choice=choice, days=days)
-
-    image = db.session.query(Image).filter(Image.short_name == "language").first()
     args = {
-        'image_location': image.location,  # placeholder image location only
-        'current': next_card_id,
-        'card_text': card_text,
-        'category': category,
-        'days': days,
-        'choices': choices
+        "game_id": new_game_id,
+        "current_category": "start",
+        "bio_age": biography_obj.age,
+        "bio_city": biography_obj.city,
+        "bio_state": biography_obj.state,
+        "bio_days_pregnant": biography_obj.days_pregnant,
+        "bio_abridged_text": biography_obj.abridged_text,
+        "bio_full_text": biography_obj.full_text,
+        "image_location": biography_obj.image.location,
+        "next_path": "decision",
+        "game_decision_id": game_decision_obj.id,
+        "choice1_option_text": situationcard_objs_list[0].option_text,
+        "choice1_id": situationcard_objs_list[0].id,
+        "choice2_option_text": situationcard_objs_list[1].option_text,
+        "choice2_id": situationcard_objs_list[1].id,
+        "choice3_option_text": situationcard_objs_list[2].option_text,
+        "choice3_id": situationcard_objs_list[2].id,
     }
-
-    # TODO: create new game instance with a randomly selected biography
-
     return render_template("main_game.html", **args)
 
 
@@ -104,8 +76,8 @@ def process_decision():
     AJAX route to process decision and redirect to next game state.
     Will send post request from HTML form asynchronously, process info, then reroute to next game state.
     """
-    selected_choice_id = request.form.get("selected_choice_id")
-    days_pregnant_int = request.form.get("current_day_int")
+    selected_choice_id = request.form.get("choice_id")
+    days_pregnant_int = request.form.get("days")
 
     # TODO: create new gamedecision instance and store to db, return gamedecision.id
     # hard-coding this value in for now until we have a seeded database

@@ -2,23 +2,19 @@
 {% block title %}{{category}}{% endblock %}
 
 {% block content1 %}
-    <img src="{{ image_location }}" alt="image_name_placeholder" height="100" width="100">
+    <img src="{{ image_location }}" alt="{{ category }}" height="500" width="500">
 {% endblock %}
 
 {% block content2 %}
     <div>
-    {{ card_text }}
+    {{ bio_full_text }}
     </div>
 
-	<form action="/start" method="GET">
-
-        <input type="hidden" name="days" value="{{days}}">
-
-        <input type="hidden" name="current" value="{{current}}">
-
-        {% for choice in choices %}
-            <button type="submit" name="choice" value={{choice['value']}}>{{choice['text']}}</button>
-        {% endfor %}
-
+	<form action="/{{ next_path }}" method="POST">
+        <input type="hidden" name="bio_days_pregnant" value="{{ bio_days_pregnant }}">
+        <input type="hidden" name="current_category" value="{{ current_category }}">
+        <button type="submit" name="choice_id" value="{{ choice1_id }}">{{choice1_option_text}}</button>
+        <button type="submit" name="choice_id" value="{{ choice2_id }}">{{choice2_option_text}}</button>
+        <button type="submit" name="choice_id" value="{{ choice3_id }}">{{choice3_option_text}}</button>
 	</form>
 {% endblock %}

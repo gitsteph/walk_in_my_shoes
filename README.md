@@ -114,7 +114,7 @@ Executing below will load up the contents of the file you specify into an intera
 
 ### 10. Seeding your database tables
 ```bash
-(venv)$ ipython -i business.py
+(venv)$ ipython -i seed.py
 ```
 ```ipython
 >>> CSVParser.read_csv("images")
