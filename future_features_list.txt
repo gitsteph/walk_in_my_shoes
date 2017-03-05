@@ -1,0 +1,7 @@
+* Add a form to enable users to add their own narrative (moderated though)
+* Enable embedding gifs in illustration zone
+* Enable embedding sound bites/videos
+* Add in real-world policy data about other areas
+* Add interactive visualizations
+* Add music?
+...
