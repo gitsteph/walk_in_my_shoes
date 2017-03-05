@@ -31,7 +31,7 @@ class NewGame():
 
 #### TODO: NEED TO FINISH TEST BELOW
     @classmethod
-    def generate_new_game_decision(cls, game_id, last_situation_card_id=None):
+    def generate_new_game_decision(cls, game_id, current_days_pregnant, last_situation_card_id=None):
         # TODO: switch out to go using only game_id (partial implementation below, scrapped b/c time)
         # find last gamedecision made, go find the situationcard.next
         # last_game_decision_card = db.session.query(GameDecision).filter(
@@ -58,12 +58,13 @@ class NewGame():
         # (unless start card was displayed, then just the options logged for now)
         # TODO: fix to log better^
 
-        choice_ids_str = str([situation_card.id for situation_card in situationcard_objs_list])
-
         new_game_decision = GameDecision(
             game_id=game_id,
             situation_card_id=last_situation_card_id,
-            choice_ids = choice_ids_str,
+            choice_id_1=situationcard_objs_list[0].id,
+            choice_id_2=situationcard_objs_list[1].id,
+            choice_id_3=situationcard_objs_list[2].id,
+            current_days_pregnant=current_days_pregnant,
             is_end=is_end,
         )
         db.session.add(new_game_decision)

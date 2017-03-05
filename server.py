@@ -45,7 +45,7 @@ def start_new_game():
     print(biography_obj.image.location)
     first_situationcard_category = "language"  # probably can remove this
 
-    game_decision_obj, situationcard_objs_list = NewGame.generate_new_game_decision(new_game_id)
+    game_decision_obj, situationcard_objs_list = NewGame.generate_new_game_decision(new_game_id, biography_obj.days_pregnant)
 
     args = {
         "game_id": new_game_id,
@@ -84,17 +84,18 @@ def process_decision():
     # last_situation_card_id is the one that was selected to be processed... will return that card's
     # content to be rendered along with next choices
     new_situationcard_to_render = SituationCard.query.get(selected_choice_id)
+    days_pregnant_int += int(new_situationcard_to_render.day_impact)
     next_category = new_situationcard_to_render.next_category
     game_decision_obj, situationcard_objs_list = NewGame.generate_new_game_decision(
-        game_id=game_id, last_situation_card_id=selected_choice_id
+        game_id=game_id, current_days_pregnant=days_pregnant_int, last_situation_card_id=selected_choice_id
     )
-    days_pregnant_int += int(new_situationcard_to_render.day_impact)
 
     args = {
         "game_id": game_id,
         "current_category": next_category,
         "bio_days_pregnant": days_pregnant_int,
         "image_location": new_situationcard_to_render.image.location,
+        "full_text": new_situationcard_to_render.full_text,
         "next_path": "decision",
         "game_decision_id": game_decision_obj.id,
         "choice1_option_text": situationcard_objs_list[0].option_text,
@@ -116,13 +117,43 @@ def render_next_game_state(game_id, game_decision_id):
     Detect if you have reached the final card.
     """
 
-    # TODO: eventually change this so that you only need the game_id,
-    # and it navigates you to the last situation_card you were on
+    gamedecision_obj = GameDecision.query.get(game_decision_id)
+    situationcard_to_render = gamedecision_obj.situation_card
+    next_category = situationcard_to_render.next_category
+    situationcards = SituationCard.query.filter(
+        SituationCard.id.in_(
+            (
+                gamedecision_obj.choice_id_1,
+                gamedecision_obj.choice_id_2,
+                gamedecision_obj.choice_id_3,
+            )
+        )
+    )
+    print("sit cards {}".format(len(list(situationcards))))
+    print(situationcards)
+    for c in situationcards:
+        print c.category
+
+    args = {
+        "game_id": game_id,
+        "current_category": situationcard_to_render.category,
+        "bio_days_pregnant": gamedecision_obj.current_days_pregnant,
+        "image_location": situationcard_to_render.image.location,
+        "full_text": situationcard_to_render.full_text,
+        "next_path": "decision",
+        "game_decision_id": gamedecision_obj.id,
+        "choice1_option_text": situationcards[0].option_text,
+        "choice1_id": situationcards[0].id,
+        "choice2_option_text": situationcards[1].option_text,
+        "choice2_id": situationcards[1].id,
+        "choice3_option_text": situationcards[2].option_text,
+        "choice3_id": situationcards[2].id,
+        "is_final": gamedecision_obj.is_end,
+    }
+    print(args)
     print(game_id)
     print(game_decision_id)
-    image_location = "./static/img/nytimes_img.png"  # placeholder image location only
-    is_final = False  # change after db is seeded
-    return render_template("main_game.html", image_location=image_location, is_final=is_final)
+    return render_template("main_game.html", **args)
 
 
 # Below are several sample Flask routes to reference

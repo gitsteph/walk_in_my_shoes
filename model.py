@@ -107,7 +107,11 @@ class GameDecision(db.Model):
     # choice_ids are the choices that the user is asked to select from
     # once the user selects a card, that will eventually lead into the next game decision
     # (the selected choice_id becomes situation_card_id)
-    choice_ids = db.Column(db.String)
+    choice_id_1 = db.Column(db.Integer)
+    choice_id_2 = db.Column(db.Integer)
+    choice_id_3 = db.Column(db.Integer)
+    # days pregnant when card text is displayed with these options
+    current_days_pregnant = db.Column(db.Integer) 
     is_end = db.Column(db.Boolean, default=False)
 
     game = relationship("Game", foreign_keys=[game_id])
