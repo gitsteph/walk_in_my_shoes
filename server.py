@@ -31,17 +31,70 @@ def render_homepage():
     return render_template("homepage.html", placeholder_text=placeholder_text, image_location=image.location)
 
 
-@app.route('/start', methods=['POST'])
+@app.route('/start', methods=['GET'])
 def start_new_game():
     """
     Start a new game.
     Pull random bio from database, create player record, and pass bio information to template.
     """
+    choice = request.args.get('choice')
+
+    if not choice:
+        days = 3 * 7
+        category = 'Start'
+        card_text = "Hello and welcome to Walk in my Shoes!"
+        next_card_id = "a_bio"
+
+        choices = [
+            {
+                'value': 'start',
+                'text': 'Begin'
+            }
+        ]
+
+    else:
+        # Should have chosen option and weeks pregnant
+        current_card_id = request.args.get('current')
+        next_card_id = choice
+        days = request.args.get('days')
+        try:
+            days = int(days)
+        except (ValueError, TypeError) as e:
+            days = 12 * 7
+
+        days += 3
+
+        choices = [
+            {
+                'value': 'choice_1',
+                'text': 'A Choice'
+            },
+            {
+                'value': 'choice_2',
+                'text': 'Another Choice'
+            },
+            {
+                'value': 'choice_3',
+                'text': 'Last Choice'
+            }
+        ]
+
+        category = 'Category'
+        card_text = "You chose {choice} and are {days} days pregnant".format(choice=choice, days=days)
+
+    image = db.session.query(Image).filter(Image.short_name == "language").first()
+    args = {
+        'image_location': image.location,  # placeholder image location only
+        'current': next_card_id,
+        'card_text': card_text,
+        'category': category,
+        'days': days,
+        'choices': choices
+    }
 
     # TODO: create new game instance with a randomly selected biography
-    
-    image = db.session.query(Image).filter(Image.short_name == "language").first() # maybe have an image for the bio/start one?
-    return render_template("main_game.html", image_location=image_location)
+
+    return render_template("main_game.html", **args)
 
 
 #### IN PROGRESS
