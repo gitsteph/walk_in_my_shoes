@@ -75,7 +75,7 @@ class CSVParser():
     # csv_category is either biographies or situationcards
     @classmethod
     def read_csv(cls, csv_category):
-        seed_file = "biographies.csv" if csv_category == "biographies" else "situationcards2.csv"
+        seed_file = "{}.csv".format(csv_category)
         with open("./seed_files/{}".format(seed_file), 'rb') as csvfile:
             rows = csv.DictReader(
                 csvfile,
