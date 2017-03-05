@@ -27,7 +27,7 @@ def render_homepage():
     Frontend will have some button to trigger `/start`.
     """
     placeholder_text = "PLACEHOLDER LANGUAGE IMAGE BELOW!"
-    image = db.session.query(Image).filter(Image.short_name == "language").first()
+    image = db.session.query(Image).filter(Image.short_name == "language").first() # maybe have an image for the bio/start one?
     return render_template("homepage.html", placeholder_text=placeholder_text, image_location=image.location)
 
 
@@ -39,7 +39,8 @@ def start_new_game():
     """
 
     # TODO: create new game instance with a randomly selected biography
-    image_location = "./static/img/nytimes_img.png"  # placeholder image location only
+    
+    image = db.session.query(Image).filter(Image.short_name == "language").first() # maybe have an image for the bio/start one?
     return render_template("main_game.html", image_location=image_location)
 
 
