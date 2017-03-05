@@ -28,7 +28,6 @@ def start_new_game():
     """
 
     # TODO: create new game instance with a randomly selected biography
-
     image_location = "./static/img/nytimes_img.png"  # placeholder image location only
     return render_template("main_game.html", image_location=image_location)
 

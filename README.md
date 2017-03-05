@@ -22,7 +22,8 @@ git clone https://github.com/gitsteph/walk_in_my_shoes.git
 ```
 
 ### 2. Install `pip`, `virtualenv`, create a new virtual environment, and activate it
-(if `virtualenv` does not work, try `pyenv-virtualenv`?)
+(if `pip install virtualenv` does not work, try uninstalling and reinstalling virtualenv...
+or try deleting `sudo rm -r /usr/local/var/postgres` then installing virtualenv again)
 To install:
 ```bash
 $ sudo easy_install pip
@@ -73,6 +74,11 @@ To access your database directly:
 ```bash
 $ psql aah
 ```
+To see all your tables:
+```bash
+$ psql aah
+aah=# \dt
+```
 (TODO: Figure out a way to make this more secure if needed/double-check the above steps)
 
 ### 6. Create a `secrets.sh` file for any future keys inside of the main project directory
@@ -83,13 +89,39 @@ $ touch secrets.sh
 ### 7. Create all tables inside an `ipython` shell
 This should be handled automatically `db.create_all()` in `model.py` when you first run the server.
 However: If you change the schema of an existing model, you'll need to delete the table that was
-changed and run `db.create_all()` after.
+changed.  The next time (and every time) you run the server (`python server.py`), tables that do not
+exist will be created using the updated models.
+
+After changing the schema of an existing table:
+```bash
+(venv)$ psql aah
+psql (9.5.3)
+aah=# DROP TABLE tablename_of_model_you_changed CASCADE;
+```
 
 ### 8. Run server
 ```bash
 (venv)$ python server.py
 ```
 To access content/test routes, type in the address bar: `http://localhost:5000/your_route_name`
+
+
+### 9. ipython!
+Executing below will load up the contents of the file you specify into an interactive ipython session.
+```bash
+(venv)$ ipython -i name_of_file.py
+```
+
+### 10. Seeding your database tables
+```bash
+(venv)$ ipython -i business.py
+```
+```ipython
+>>> StaticData.add_image("./static/img/nytimes_img.png")
+>>> CSVParser.read_csv("biographies")
+>>> CSVParser.read_csv("situationcards")
+```
+(TODO: make this a shell script)
 
 
 ## Git Basics
