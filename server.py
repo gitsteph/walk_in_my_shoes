@@ -1,4 +1,5 @@
 from flask import Flask, render_template, request
+from flask_cors import CORS, cross_origin
 
 from business import NewGame
 from model import (
@@ -14,6 +15,7 @@ from model import (
 )
 
 app = Flask(__name__)
+CORS(app)
 
 
 # general card sequence:
