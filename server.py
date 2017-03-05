@@ -117,14 +117,46 @@ def render_next_game_state(game_id, game_decision_id):
     Also passes up situationcard data.
     Detect if you have reached the final card.
     """
+    gamedecision_obj = GameDecision.query.get(game_decision_id)
+    situationcard_to_render = gamedecision_obj.situation_card
+    next_category = situationcard_to_render.next_category
+    situationcards = SituationCard.query.filter(
+        SituationCard.id.in_(
+            (
+                gamedecision_obj.choice_id_1,
+                gamedecision_obj.choice_id_2,
+                gamedecision_obj.choice_id_3,
+            )
+        )
+    )
+    print("sit cards {}".format(len(list(situationcards))))
+    print(situationcards)
+    for c in situationcards:
+        print c.category
 
-    # TODO: eventually change this so that you only need the game_id,
-    # and it navigates you to the last situation_card you were on
+    try:
+        image_obj = db.session.query(Image).filter(Image.short_name == situationcard_to_render.category).first()
+    except:
+        image_obj = db.session.query(Image).filter(Image.short_name == "data_diagram").first()
+
+    image_location = image_obj.location
+    args = {
+        "game_id": game_id,
+        "current_category": situationcard_to_render.category,
+        "bio_days_pregnant": gamedecision_obj.current_days_pregnant,
+        "image_location": image_location,
+        "full_text": situationcard_to_render.full_text,
+        "next_path": "decision",
+        "game_decision_id": gamedecision_obj.id,
+        "is_final": gamedecision_obj.is_end,
+    }
+    for index in xrange(len(list(situationcards))):
+        args["choice{}_option_text".format(index)] = situationcards[index].option_text
+    print(args)
     print(game_id)
     print(game_decision_id)
-    image_location = "./static/img/nytimes_img.png"  # placeholder image location only
-    is_final = False  # change after db is seeded
-    return render_template("main_game.html", image_location=image_location, is_final=is_final)
+    # image location doesn't send through here to render... why?
+    return render_template("main_game.html", **args)
 
 
 # Below are several sample Flask routes to reference
