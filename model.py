@@ -21,14 +21,16 @@ class SituationCard(db.Model):
     __tablename__ = "situationcards"
 
     id = db.Column(db.Integer, autoincrement=True, nullable=False, primary_key=True)
-    category = db.Column(db.String(20), nullable=False)
+    category = db.Column(db.String, nullable=False)
     day_impact = db.Column(db.Integer, nullable=True)
-    money_impact = db.Column(db.Integer, nullable=True)
-    option_text = db.Column(db.String(20), nullable=False)
+    wait_or_extra_condition_weeks_over = db.Column(db.Integer, nullable=True)
+    # money_impact = db.Column(db.Integer, nullable=True)
+    extra_category = db.Column(db.String, default=None)  # if there are prereq categories, e.g. resource agency
+    next_category = db.Column(db.String),
+    option_text = db.Column(db.String, nullable=False)
+    text_badge = db.Column(db.String),
     full_text = db.Column(db.String, nullable=False)
     image_id = db.Column(db.Integer, db.ForeignKey("images.id"))
-    next_category_0 = db.Column(db.String(20), default=None)  # if there are prereq categories, e.g. resource agency
-    next_category_1 = db.Column(db.String(20))
 
     image = relationship("Image", foreign_keys=[image_id])
     # gamedecisions = db.relationship("GameDecision", backref="situationcard")
@@ -59,8 +61,9 @@ class Biography(db.Model):
     age = db.Column(db.Integer)
     city = db.Column(db.String)
     state = db.Column(db.String)
+    days_pregnant = db.Column(db.Integer)
+    abridged_text = db.Column(db.String)
     full_text = db.Column(db.String, nullable=False)
-    weeks_pregnant = db.Column(db.Integer)
     image_id = db.Column(db.Integer, db.ForeignKey("images.id"))
 
     image = relationship("Image", foreign_keys=[image_id])
@@ -91,6 +94,9 @@ class GameDecision(db.Model):
     id = db.Column(db.Integer, autoincrement=True, nullable=False, primary_key=True)
     game_id = db.Column(db.Integer, db.ForeignKey("games.id"))
     situation_card_id = db.Column(db.Integer, db.ForeignKey("situationcards.id"))
+    # choice_ids are the choices that the user is asked to select from
+    # once the user selects a card, that will eventually lead into the next game decision
+    # (the selected choice_id becomes situation_card_id)
     choice_ids = db.Column(db.String)
     is_end = db.Column(db.Boolean, default=False)
 
