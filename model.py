@@ -21,14 +21,16 @@ class SituationCard(db.Model):
     __tablename__ = "situationcards"
 
     id = db.Column(db.Integer, autoincrement=True, nullable=False, primary_key=True)
-    category = db.Column(db.String(20), nullable=False)
+    category = db.Column(db.String, nullable=False)
     day_impact = db.Column(db.Integer, nullable=True)
-    money_impact = db.Column(db.Integer, nullable=True)
-    option_text = db.Column(db.String(20), nullable=False)
+    wait_or_extra_condition_weeks_over = db.Column(db.Integer, nullable=True)
+    # money_impact = db.Column(db.Integer, nullable=True)
+    extra_category = db.Column(db.String, default=None)  # if there are prereq categories, e.g. resource agency
+    next_category = db.Column(db.String),
+    option_text = db.Column(db.String, nullable=False)
+    text_badge = db.Column(db.String),
     full_text = db.Column(db.String, nullable=False)
     image_id = db.Column(db.Integer, db.ForeignKey("images.id"))
-    next_category_0 = db.Column(db.String(20), default=None)  # if there are prereq categories, e.g. resource agency
-    next_category_1 = db.Column(db.String(20))
 
     image = relationship("Image", foreign_keys=[image_id])
     # gamedecisions = db.relationship("GameDecision", backref="situationcard")

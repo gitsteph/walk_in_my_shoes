@@ -21,10 +21,12 @@ A game based on Women's Health Specialists' "Walk in My Shoes" curriculum.
 git clone https://github.com/gitsteph/walk_in_my_shoes.git
 ```
 
-### 2. Install `virtualenv`, create a new virtual environment, and activate it
+### 2. Install `pip`, `virtualenv`, create a new virtual environment, and activate it
+(if `virtualenv` does not work, try `pyenv-virtualenv`?)
 To install:
 ```bash
-$ brew install virtualenv
+$ sudo easy_install pip
+$ pip install virtualenv
 $ virtualenv venv
 ```
 To activate:
@@ -36,9 +38,8 @@ To deactivate:
 (venv)$ deactivate
 ```
 
-### 3. Install `pip` and dependencies from `requirements.txt`
+### 3. Install dependencies from `requirements.txt`
 ```bash
-$ sudo easy_install pip
 $ source venv/bin/activate
 (venv)$ pip install -r requirements.txt
 ```
