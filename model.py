@@ -59,8 +59,9 @@ class Biography(db.Model):
     age = db.Column(db.Integer)
     city = db.Column(db.String)
     state = db.Column(db.String)
+    days_pregnant = db.Column(db.Integer)
+    abridged_text = db.Column(db.String)
     full_text = db.Column(db.String, nullable=False)
-    weeks_pregnant = db.Column(db.Integer)
     image_id = db.Column(db.Integer, db.ForeignKey("images.id"))
 
     image = relationship("Image", foreign_keys=[image_id])
@@ -91,6 +92,9 @@ class GameDecision(db.Model):
     id = db.Column(db.Integer, autoincrement=True, nullable=False, primary_key=True)
     game_id = db.Column(db.Integer, db.ForeignKey("games.id"))
     situation_card_id = db.Column(db.Integer, db.ForeignKey("situationcards.id"))
+    # choice_ids are the choices that the user is asked to select from
+    # once the user selects a card, that will eventually lead into the next game decision
+    # (the selected choice_id becomes situation_card_id)
     choice_ids = db.Column(db.String)
     is_end = db.Column(db.Boolean, default=False)
 

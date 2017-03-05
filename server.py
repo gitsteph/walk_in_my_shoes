@@ -55,7 +55,7 @@ def process_decision():
 
 
 @app.route('/<game_id>/<game_decision_id>', methods=['GET'])
-def render_next_game_state(game_id):
+def render_next_game_state(game_id, game_decision_id):
 	"""
 	Renders template with image location, player info, and gamedecision object to use.
 	Also passes up situationcard data.
