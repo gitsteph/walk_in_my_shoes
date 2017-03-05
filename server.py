@@ -1,5 +1,15 @@
 from flask import Flask, render_template, request
-from model import connect_to_db, db, State
+from model import (
+    connect_to_db,
+    db,
+    State,
+    SituationCard,
+    Image,
+    Biography,
+    Game,
+    GameDecision,
+    WHSClinic,
+)
 
 app = Flask(__name__)
 
@@ -17,7 +27,8 @@ def render_homepage():
     Frontend will have some button to trigger `/start`.
     """
     placeholder_text = "PLACEHOLDER HERE"
-    return render_template("test.html", color_or_state=placeholder_text)
+    image = db.session.query(Image).first()
+    return render_template("homepage.html", placeholder_text=placeholder_text, image_location=image.location)
 
 
 @app.route('/start', methods=['POST'])
