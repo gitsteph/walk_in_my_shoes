@@ -1,4 +1,4 @@
-from flask import Flask, redirect, render_template, request
+from flask import Flask, redirect, render_template, Response, request
 from flask_cors import CORS, cross_origin
 import json
 
