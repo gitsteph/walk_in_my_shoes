@@ -69,7 +69,7 @@ class Biography(db.Model):
     image = relationship("Image", foreign_keys=[image_id])
 
     def __repr__(self):
-        return "<id=%s, weeks_pregnant=%s>" % (self.id, self.weeks_pregnant)
+        return "<id=%s, days_pregnant=%s>" % (self.id, self.days_pregnant)
 
 
 class WHSClinic(db.Model):
