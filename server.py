@@ -60,6 +60,9 @@ def render_next_game_state(game_id, game_decision_id):
     Also passes up situationcard data.
     Detect if you have reached the final card.
     """
+
+    # TODO: eventually change this so that you only need the game_id,
+    # and it navigates you to the last situation_card you were on
     print(game_id)
     print(game_decision_id)
     image_location = "./static/img/nytimes_img.png"  # placeholder image location only
