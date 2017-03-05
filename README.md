@@ -1,10 +1,18 @@
 # Walk in My Shoes
 
 ## Purpose
+A game based on Women's Health Specialists' "Walk in My Shoes" curriculum.
 [NEED CONTENT]
 
 ## Features
 [NEED CONTENT]
+
+## Team
+* Andrea (@bobicka): Animation, Illustration, UX
+* Grant (@grant): Engineering, UX
+* Somer: Content, UX
+* Stephanie (@gitsteph): Engineering, Project Management
+* Steven (@steven-jeram): Engineering, Content
 
 ## Getting Started
 
