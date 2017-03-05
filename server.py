@@ -1,5 +1,6 @@
 from flask import Flask, redirect, render_template, request
 from flask_cors import CORS, cross_origin
+import json
 
 from business import NewGame
 from model import (
@@ -49,7 +50,7 @@ def start_new_game():
 
     game_decision_obj, situationcard_objs_list = NewGame.generate_new_game_decision(new_game_id)
 
-    args = {
+    response_payload = {
         "game_id": new_game_id,
         "current_category": "start",
         "bio_age": biography_obj.age,
@@ -68,10 +69,12 @@ def start_new_game():
         "choice3_option_text": situationcard_objs_list[2].option_text,
         "choice3_id": situationcard_objs_list[2].id,
     }
-    return render_template("main_game.html", **args)
+    # return render_template("main_game.html", **args)
+    return Response(json.dumps(response_payload),
+                    mimetype='application/json',
+                    headers={'Cache-Control': 'no-cache'})
 
 
-#### IN PROGRESS
 @app.route('/decision', methods=['POST'])
 def process_decision():
     """
@@ -92,7 +95,7 @@ def process_decision():
     )
     days_pregnant_int += int(new_situationcard_to_render.day_impact)
 
-    args = {
+    response_payload = {
         "game_id": game_id,
         "current_category": next_category,
         "bio_days_pregnant": days_pregnant_int,
@@ -107,9 +110,13 @@ def process_decision():
         "choice3_id": situationcard_objs_list[2].id,
     }
     print(args)
-    return redirect("/{0}/{1}".format(game_id, game_decision_obj.id))
+    # return redirect("/{0}/{1}".format(game_id, game_decision_obj.id))
+    return Response(json.dumps(response_payload),
+                    mimetype='application/json',
+                    headers={'Cache-Control': 'no-cache'})
 
 
+#### BELOW NOT USED WITH REACT FRONTEND
 @app.route('/<game_id>/<game_decision_id>', methods=['GET'])
 def render_next_game_state(game_id, game_decision_id):
     """
