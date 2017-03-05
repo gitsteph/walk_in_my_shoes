@@ -1,4 +1,4 @@
-from flask import Flask, render_template, request
+from flask import Flask, redirect, render_template, request
 
 from business import NewGame
 from model import (
@@ -76,18 +76,36 @@ def process_decision():
     AJAX route to process decision and redirect to next game state.
     Will send post request from HTML form asynchronously, process info, then reroute to next game state.
     """
-    selected_choice_id = request.form.get("choice_id")
-    days_pregnant_int = request.form.get("days")
+    game_id = request.form.get("game_id")
+    selected_choice_id = int(request.form.get("choice_id"))
+    days_pregnant_int = int(request.form.get("bio_days_pregnant"))
+    last_category = request.form.get("current_category")
 
-    # TODO: create new gamedecision instance and store to db, return gamedecision.id
-    # hard-coding this value in for now until we have a seeded database
+    # last_situation_card_id is the one that was selected to be processed... will return that card's
+    # content to be rendered along with next choices
+    new_situationcard_to_render = SituationCard.query.get(selected_choice_id)
+    next_category = new_situationcard_to_render.next_category
+    game_decision_obj, situationcard_objs_list = NewGame.generate_new_game_decision(
+        game_id=game_id, last_situation_card_id=selected_choice_id
+    )
+    days_pregnant_int += int(new_situationcard_to_render.day_impact)
 
-    day_diff_int = 4  # add four days
-    days_pregnant_int += day_diff_int
-
-    game_id = 4  # placeholder value
-    game_decision_id = 10  # placeholder value
-    return redirect("/{0}/{1}".format(game_id, game_decision_id))
+    args = {
+        "game_id": game_id,
+        "current_category": next_category,
+        "bio_days_pregnant": days_pregnant_int,
+        "image_location": new_situationcard_to_render.image.location,
+        "next_path": "decision",
+        "game_decision_id": game_decision_obj.id,
+        "choice1_option_text": situationcard_objs_list[0].option_text,
+        "choice1_id": situationcard_objs_list[0].id,
+        "choice2_option_text": situationcard_objs_list[1].option_text,
+        "choice2_id": situationcard_objs_list[1].id,
+        "choice3_option_text": situationcard_objs_list[2].option_text,
+        "choice3_id": situationcard_objs_list[2].id,
+    }
+    print(args)
+    return redirect("/{0}/{1}".format(game_id, game_decision_obj.id))
 
 
 @app.route('/<game_id>/<game_decision_id>', methods=['GET'])
