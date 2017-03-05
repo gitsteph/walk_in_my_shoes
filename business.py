@@ -75,7 +75,7 @@ class CSVParser():
     # csv_category is either biographies or situationcards
     @classmethod
     def read_csv(cls, csv_category):
-        seed_file = "biographies.csv" if csv_category == "biographies" else "situationcards.csv"
+        seed_file = "biographies.csv" if csv_category == "biographies" else "situationcards2.csv"
         with open("./seed_files/{}".format(seed_file), 'rb') as csvfile:
             rows = csv.DictReader(
                 csvfile,
@@ -94,6 +94,7 @@ class CSVParser():
                     )
                     print row["age"]
                 else:
+                    print(row)
                     StaticData.add_situation_card(
                         category=row["category"],
                         day_impact=int(row["day_impact"]),

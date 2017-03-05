@@ -23,7 +23,7 @@ class SituationCard(db.Model):
     id = db.Column(db.Integer, autoincrement=True, nullable=False, primary_key=True)
     category = db.Column(db.String, nullable=False)
     day_impact = db.Column(db.Integer, nullable=True)
-    wait_or_extra_condition_weeks_over = db.Column(db.Integer, nullable=True)
+    wait_or_extra_condition_weeks_over = db.Column(db.String, nullable=True)  # to handle weird data for now, should fix later
     # money_impact = db.Column(db.Integer, nullable=True)
     extra_category = db.Column(db.String, default=None)  # if there are prereq categories, e.g. resource agency
     next_category = db.Column(db.String),
